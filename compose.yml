@@ -1,0 +1,43 @@
+services:
+  semaphore:
+    image: semaphoreui/semaphore:v2.12.3
+    restart: on-failure
+    ports:
+      - 3000:3000
+    environment:
+      SEMAPHORE_ADMIN: admin
+      SEMAPHORE_ADMIN_PASSWORD: admin
+      SEMAPHORE_ADMIN_EMAIL: admin@localhost
+      SEMAPHORE_ADMIN_NAME: Admin
+      SEMAPHORE_DB_DIALECT: mysql
+      SEMAPHORE_DB_HOST: semaphore_db
+      SEMAPHORE_DB_NAME: semaphore
+      SEMAPHORE_DB_USER: semaphore
+      SEMAPHORE_DB_PASS: semaphore
+    healthcheck:
+      test: ["CMD-SHELL", "curl --silent --show-error --fail-with-body --max-time 5 http://localhost:3000/api/ping || exit 1"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 30s
+    depends_on:
+      semaphore_db:
+        condition: service_healthy
+  semaphore_db:
+    image: mysql:9.2.0
+    restart: on-failure
+    environment:
+      MYSQL_USER: semaphore
+      MYSQL_PASSWORD: semaphore
+      MYSQL_DATABASE: semaphore
+      MYSQL_ROOT_PASSWORD: root
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 30s
+    volumes:
+      - semaphore_mysql:/var/lib/mysql
+volumes:
+    semaphore_mysql:
