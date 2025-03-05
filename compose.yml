@@ -24,20 +24,21 @@ services:
       semaphore_db:
         condition: service_healthy
   semaphore_db:
-    image: mysql:9.2.0
+    image: mariadb:11.7.2
     restart: on-failure
     environment:
       MYSQL_USER: semaphore
       MYSQL_PASSWORD: semaphore
       MYSQL_DATABASE: semaphore
       MYSQL_ROOT_PASSWORD: root
+      MYSQL_PWD: root
     healthcheck:
-      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      test: ["CMD", "mariadb-admin", "status", "-h", "localhost"]
       interval: 30s
       timeout: 5s
       retries: 3
       start_period: 30s
     volumes:
-      - semaphore_mysql:/var/lib/mysql
+      - semaphore_db_mariadb_data:/var/lib/mysql
 volumes:
-    semaphore_mysql:
+  semaphore_db_mariadb_data:
