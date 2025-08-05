@@ -12,7 +12,7 @@ Start the environment:
 docker compose up --detach
 ```
 
-Access the Semaphore UI at:
+Access the Semaphore UI as `admin:admin` at:
 
 http://localhost:3000
 
