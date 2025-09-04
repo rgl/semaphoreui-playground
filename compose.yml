@@ -1,8 +1,9 @@
 services:
   semaphore:
     # see https://semaphoreui.com/install/docker/
+    # see https://github.com/semaphoreui/semaphore/releases
     # see https://hub.docker.com/r/semaphoreui/semaphore/tags
-    image: semaphoreui/semaphore:v2.15.5
+    image: semaphoreui/semaphore:v2.16.18
     restart: on-failure
     ports:
       - 3000:3000
@@ -27,8 +28,9 @@ services:
         condition: service_healthy
   semaphore_db:
     # see https://mariadb.org/download/
+    # see https://github.com/MariaDB/server/releases
     # see https://hub.docker.com/_/mariadb/tags
-    image: mariadb:11.8.2
+    image: mariadb:11.8.3
     restart: on-failure
     environment:
       MYSQL_USER: semaphore
